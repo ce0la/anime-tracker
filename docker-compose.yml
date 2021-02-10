@@ -1,0 +1,56 @@
+version: '3.7'
+
+services:
+  server:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: anime-server
+    container_name: anime-node-server
+    command: /usr/src/anime-be/node_modules/.bin/nodemon app.js
+    volumes:
+      - ./backend/:/usr/src/anime-be
+      - /usr/src/anime-be/node_modules
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+    env_file: ./backend/.env
+    environment:
+      - NODE_ENV=development
+    networks:
+      - anime-network
+  mongo:
+    image: mongo
+    volumes:
+      - data-volume:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - anime-network
+  client:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: anime-client
+    container_name: anime-react-client
+    command: yarn start
+    volumes:
+      - ./frontend/:/usr/src/anime-fe
+      - /usr/src/anime-fe/node_modules
+    depends_on:
+      - server
+    ports:
+      - "3000:3000"
+    networks:
+      - anime-network
+
+networks:
+    anime-network:
+        driver: bridge
+
+volumes:
+    data-volume:
+    node_modules:
+    web-root:
+      driver: local
