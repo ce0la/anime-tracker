@@ -7,14 +7,14 @@ router.get('/', adminController.getIndex);
 
 router.get('/add-anime', adminController.getAddAnime);
 
-router.get('/edit-anime/:animeId', adminController.getEditAnime);
-
 router.post('/add-anime', adminController.postAnime);
 
 router.post('/edit-anime', adminController.postEditAnime);
 
+router.post('/delete', adminController.postDelete);
+
 router.get('/:animeId', adminController.getAnime);
 
-router.post('/delete', adminController.postDelete);
+router.get('/edit-anime/:animeId', adminController.getEditAnime);
 
 module.exports = router;
